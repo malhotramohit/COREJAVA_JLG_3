@@ -47,9 +47,9 @@ public class Sortings {
 		// 2) Divide and reach till smallest problem : array with one ele
 		// 3) merge
 		// 40 10 50 20 11 31 21 30
-		if ( end-start> 0) {
-			int mid = (end-start)/ 2; // 4: 11
-			
+		if (end - start > 0) {
+			int mid = (end - start) / 2; // 4: 11
+
 			mergeSort(arr, start, mid);
 			mergeSort(arr, mid, end);
 			merge(arr, start, mid, end);
@@ -62,7 +62,7 @@ public class Sortings {
 		// ar2 : 11 21 31 , j = 3 , size = 3
 		// narr : 8 , k = 8 , : 10 11 20 21 30 31 40 50
 		// res :
-		
+
 		int[] lArray = new int[mid];
 		int[] rArray = new int[arr.length - mid];
 
@@ -74,7 +74,7 @@ public class Sortings {
 			rArray[m] = arr[i];
 			m++;
 		}
-		
+
 		int i = 0;
 		int j = 0;
 		int k = 0;
@@ -155,6 +155,84 @@ public class Sortings {
 		System.out
 				.println("-----Time Taken by Bubble Sort on array of size " + arr.length + " is " + duration + "-----");
 
+	}
+
+	public static void quickSort(int[] array) {
+		quickSort(array, 0, array.length - 1);
+	}
+
+	private static void quickSort(int[] array, int start, int end) {
+		if (start < end) {
+			int pivotIndex = partition(array, start, end);
+			quickSort(array, start, pivotIndex - 1);
+			quickSort(array, pivotIndex + 1, end);
+		}
+	}
+
+	// Partition :
+	// pivot = 23 , pivotIndex=0
+	// i = 3
+	// j = 7
+	// i/p : 17 12 9 23 25 45 90 89
+	// sort : 9 12 17 23 25 45 89 90
+	// o/p : 12 9 17 23 45 89 25 90
+
+	public static int partition(int[] array, int start, int end) {
+		int pivot = array[start];// 23
+		int i = start;
+		for (int j = 1; j < array.length; j++) {
+			if (pivot > array[j]) {
+				// increment i
+				// swap i and j
+				i++;
+				int temp = array[i];
+				array[i] = array[j];
+				array[j] = temp;
+			}
+		}
+		int temp = array[i];
+		array[i] = array[start];
+		array[start] = temp;
+		return i;
+	}
+
+	public static void insertionSort(int[] array) {
+		// 8 6 7 1 5 9 2 10 11 -1
+		// 6 8 7 1 5 9 2 10 11 -1
+		// 6 7 8 1 5 9 2 10 11 -1
+		// 6 7 1 8 9 2 10 11 -1
+		// 6 1 7 8 9 2 10 11 -1
+		//
+		// 1 6 7 8 5 9 2 10 11 -1
+		//
+		for (int i = 1; i < array.length; i++) {
+			for (int j = i; j > 0; j--) {
+				if (array[j - 1] > array[j]) {
+					int temp = array[j - 1];
+					array[j - 1] = array[j];
+					array[j] = temp;
+				}
+			}
+		}
+
+	}
+
+	public static void insertionSortShohom(int array[]) {
+		// 8 6 7 1 5 9 2 10 11 -1
+		// 8 8 7 1 5 9 2 10 11 -1
+		// 8 8 8 
+ 		int n = array.length;
+
+		for (int j = 1; j < n; j++) {
+			int key = array[j];
+			int i = j - 1;
+			while ((i > -1) && (array[i] > key)) {
+				array[i + 1] = array[i];
+				i--;
+			}
+
+			array[i + 1] = key;
+		}
 	}
 
 }

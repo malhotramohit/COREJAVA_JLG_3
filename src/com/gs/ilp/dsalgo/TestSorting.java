@@ -7,10 +7,25 @@ public class TestSorting {
 
 	public static void main(String[] args) {
 
+		// bubbleAndBinaryTesting();
+
+		int[] array = { 8, 6, 7, 1, 5, 9, 2, 10, 11, -1 };// { 23, 45, 12, 89, 25, 9, 90, 17 }; // 12 9 17 (23) 45 89 25
+															// 90
+		System.out.println("before sorting");
+		System.out.println(Arrays.toString(array));
+		// Sortings.partition(array);
+		// Sortings.quickSort(array);
+		Sortings.insertionSortShohom(array);
+		System.out.println("after sorting");
+		System.out.println(Arrays.toString(array));
+
+	}
+
+	private static void bubbleAndBinaryTesting() {
 		Random random = new Random();
-		int[] arr = new int[32]; //5+1
+		int[] arr = new int[32]; // 5+1
 		for (int i = 31; i > 0; i--) {
-			arr[i] =i;
+			arr[i] = i;
 		}
 		// System.out.println("---Before sorting---");
 		// // printArrayValues(arr);
@@ -30,16 +45,14 @@ public class TestSorting {
 
 		// int index = binarySearch(array, 0, array.length - 1, 129);
 		performBubbleSort(arr);
-		
-		
-		
+
 		long st = System.currentTimeMillis();
-		//int index = linearSearch(arr, 54656565);
-		int index = binarySearch(arr, 0, arr.length-1, 54656565);
+		// int index = linearSearch(arr, 54656565);
+		int index = binarySearch(arr, 0, arr.length - 1, 54656565);
 		long et = System.currentTimeMillis();
-		long res = et-st;
-		System.out.println("Time taken by ls "+res);
-		//System.out.println(Arrays.toString(arr));
+		long res = et - st;
+		System.out.println("Time taken by ls " + res);
+		// System.out.println(Arrays.toString(arr));
 		if (index > -1) {
 			System.out.println("ele present at " + index);
 		} else {
