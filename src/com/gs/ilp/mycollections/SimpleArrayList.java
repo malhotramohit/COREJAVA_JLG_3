@@ -1,12 +1,15 @@
 package com.gs.ilp.mycollections;
 
 import java.util.Arrays;
+import java.util.ConcurrentModificationException;
 
 public class SimpleArrayList implements SimpleList {
 
 	private Object[] array;
 
 	private int size = 10;
+
+	private int changeCounter = 0;
 
 	private int modCount = 0;
 
@@ -46,6 +49,7 @@ public class SimpleArrayList implements SimpleList {
 	public void set(int index, Object element) {
 		if (index >= 0 && index < array.length) {
 			array[index] = element;
+			// modCount++;
 		}
 	}
 
@@ -65,10 +69,9 @@ public class SimpleArrayList implements SimpleList {
 		 * ,-90, 56, 13 };
 		 */
 		if (index >= 0 && index <= array.length) {
-			
 
-			if (modCount <this.size) {
-				array[modCount] = element;
+			if (changeCounter < this.size) {
+				array[changeCounter] = element;
 			}
 
 			else {
@@ -85,6 +88,7 @@ public class SimpleArrayList implements SimpleList {
 				array = newArray;
 			}
 
+			changeCounter++;
 			modCount++;
 		}
 	}
@@ -118,6 +122,7 @@ public class SimpleArrayList implements SimpleList {
 				}
 			}
 			array = newArray;
+			modCount++;
 		}
 
 		return objToReturn;
@@ -149,11 +154,86 @@ public class SimpleArrayList implements SimpleList {
 	@Override
 	public void clear() {
 		array = new Object[0];
+		modCount++;
 	}
 
 	@Override
 	public SimpleIterator iterator() {
-		return new SimpleListIterator(array);
+		return new SimpleListIterator();
+	}
+
+	private class SimpleListIterator implements SimpleIterator {
+
+		private int position;
+
+		private int excpectedModCount = modCount;
+
+		public SimpleListIterator() {
+			position = 0;
+		}
+
+		@Override
+		public boolean hasNext() {
+			checkForModification();
+			if (position < array.length) {
+				return true;
+			}
+			return false;
+		}
+
+		@Override
+		public Object next() {
+			checkForModification();
+			return array[position++];
+
+		}
+
+		private void checkForModification() {
+			if (excpectedModCount != modCount) {
+				throw new ConcurrentModificationException();
+			}
+		}
+
+		@Override
+		public Object currentElement() {
+			checkForModification();
+			if (position < array.length) {
+				return array[position];
+			}
+			return null;
+		}
+
+		@Override
+		public synchronized Object remove() {
+			/*
+			 * 1) Valid index 2) take a copy of object to return 3) Create a new array of
+			 * one size less 4) { 23, 56, 12, 89 ,-90, 56, 13 } remove(3) 5) Copy 0: < index
+			 * and copy index+1 : length
+			 */
+			checkForModification();
+			Object objToReturn = null;
+			if (position >= 0 && position < array.length) {
+				objToReturn = array[position];
+				Object[] newArray = new Object[array.length - 1];
+				int j = 0;
+				for (int i = 0; i < array.length; i++) {
+					if (i != position) {
+						newArray[j++] = array[i];
+					}
+				}
+				array = newArray;
+				excpectedModCount = modCount;
+			}
+
+			return objToReturn;
+		}
+
+		@Override
+		public void reset() {
+			checkForModification();
+			position = 0;
+		}
+
 	}
 
 }

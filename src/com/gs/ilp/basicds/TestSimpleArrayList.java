@@ -4,13 +4,6 @@ import com.gs.ilp.mycollections.SimpleArrayList;
 import com.gs.ilp.mycollections.SimpleIterator;
 import com.gs.ilp.mycollections.SimpleList;
 
-
-
-
-
-
-
-
 /**
  * This class will test the SimpleArrayList class
  * 
@@ -21,11 +14,10 @@ public class TestSimpleArrayList {
 
 	public static void main(String[] args) {
 		Integer[] integers = { 23, 56, 12, -90, 56, 13 }; // 6
-		
+
 		Double[] doubles = { 23.9, 56.34, 12.55, -90.67, 56.56, 13.0 }; // 6
 
-
-		SimpleList simpleList1 = new SimpleArrayList(doubles);
+		SimpleList simpleList1 = new SimpleArrayList(integers);
 
 		System.out.println("Calling get method at index 4 " + simpleList1.get(4));
 		System.out.println("Calling get method at index 90 " + simpleList1.get(90));
@@ -62,26 +54,39 @@ public class TestSimpleArrayList {
 				System.out.println("num is odd " + simpleList1.get(i));
 			}
 		}
-		
-		
+
 		System.out.println("Iterating through iterator");
+
+		System.out.println("before--" + simpleList1);
+
+		SimpleIterator simpleIterator1 = simpleList1.iterator();
 		
-		SimpleIterator simpleIterator1= simpleList1.iterator();
-		while(simpleIterator1.hasNext()) {
-			System.out.println(simpleIterator1.next());
-		}
+		new Thread(()->{
+			simpleIterator1.remove();
+		}).start();
+	
+		new Thread(()->{
+			simpleIterator1.remove();
+		}).start();
 		
 		
-		
-//		SimpleIterator simpleIterator12= simpleList1.listIterator(3); // 3 2 1 0
-//		while(simpleIterator1.hasPrevious()) {
-//			System.out.println(simpleIterator1.previous());
+//		while (simpleIterator1.hasNext()) {
+//			simpleList1.remove(simpleIterator1.next());
+//			// simpleIterator1.remove();
 //		}
+		// for(String str : listStr) {
+		// listStr.remove(str);
+		// }
+		System.out.println("after--" + simpleList1);
+
+		// SimpleIterator simpleIterator12= simpleList1.listIterator(3); // 3 2 1 0
+		// while(simpleIterator1.hasPrevious()) {
+		// System.out.println(simpleIterator1.previous());
+		// }
 
 		simpleList1.clear();
 		System.out.println(simpleList1);
 		System.out.println("size of simple list after clear is " + simpleList1.size());
-		
 
 	}
 
